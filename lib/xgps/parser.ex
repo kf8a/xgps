@@ -44,6 +44,7 @@ defmodule XGPS.Parser do
   end
 
   defp get_type(["GPRMC"|content]), do: {:rmc, content}
+  defp get_type(["GNRMC"|content]), do: {:rmc, content}
   defp get_type(["GPGGA"|content]), do: {:gga, content}
   defp get_type(["GNGGA"|content]), do: {:gga, content}
   defp get_type(content), do: {:unknown, content}
