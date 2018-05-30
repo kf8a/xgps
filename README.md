@@ -6,6 +6,8 @@ GPS for Elixir
 
 XGPS runs as an application and will start along with you application, and connect to an serial port to get GPS data.
 
+This fork is modified to work with the Emlid Reach RTK unit.
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed as:
