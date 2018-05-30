@@ -136,6 +136,10 @@ defmodule XGPS.Port.Reader do
     %{gps_data | has_fix: false}
   end
 
+  defp update_gps_data(%XGPS.Messages.GSA{fix_quality: 1}, gps_data) do
+    %{gps_data | has_fix: false}
+  end
+
   defp update_gps_data(%XGPS.Messages.GGA{} = gga, gps_data) do
     %{gps_data | has_fix: true,
                                 fix_quality: gga.fix_quality,

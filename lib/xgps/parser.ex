@@ -1,4 +1,6 @@
 defmodule XGPS.Parser do
+  require Logger
+
   def start_link do
     GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
@@ -47,6 +49,7 @@ defmodule XGPS.Parser do
   defp get_type(["GNRMC"|content]), do: {:rmc, content}
   defp get_type(["GPGGA"|content]), do: {:gga, content}
   defp get_type(["GNGGA"|content]), do: {:gga, content}
+  defp get_type(["GPGSA"|content]), do: {:gsa, content}
   defp get_type(content), do: {:unknown, content}
 
   defp parse_content({:rmc, content}) do
@@ -80,6 +83,22 @@ defmodule XGPS.Parser do
           height_over_goeid: {parse_float(Enum.at(content, 10)), parse_metric(Enum.at(content, 11))},
           time_since_last_dgps: Enum.at(content, 12) |> parse_string,
           dgps_station_id: Enum.at(content, 13) |> parse_string
+        }
+      _ -> {:unknown, :unknown_content_length}
+    end
+  end
+
+  defp parse_content({:gsa, content}) do
+    Logger.debug "gsa: #{content} length: #{length(content)}"
+    case length(content) do
+      17 ->
+        %XGPS.Messages.GSA{
+          mode: Enum.at(content, 0),
+          fix_quality: parse_int(Enum.at(content, 1)),
+          pdop: parse_float(Enum.at(content, 14)),
+          hdop: parse_float(Enum.at(content, 15)),
+          vdop: parse_float(Enum.at(content, 16))
+
         }
       _ -> {:unknown, :unknown_content_length}
     end
