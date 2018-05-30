@@ -89,7 +89,6 @@ defmodule XGPS.Parser do
   end
 
   defp parse_content({:gsa, content}) do
-    Logger.debug "gsa: #{content} length: #{length(content)}"
     case length(content) do
       17 ->
         %XGPS.Messages.GSA{
