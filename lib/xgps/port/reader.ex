@@ -90,6 +90,7 @@ defmodule XGPS.Port.Reader do
 
   defp will_update_gps_data?(%XGPS.Messages.RMC{}), do: true
   defp will_update_gps_data?(%XGPS.Messages.GGA{}), do: true
+  defp will_update_gps_data?(%XGPS.Messages.GSA{}), do: true
   defp will_update_gps_data?(_parsed), do: false
 
   defp log_sentence(sentence) do
@@ -136,8 +137,16 @@ defmodule XGPS.Port.Reader do
     %{gps_data | has_fix: false}
   end
 
+  defp update_gps_data(%XGPS.Messages.GGA{fix_quality: 1}, gps_data) do
+    %{gps_data | has_fix: false}
+  end
+
   defp update_gps_data(%XGPS.Messages.GSA{fix_quality: 1}, gps_data) do
     %{gps_data | has_fix: false}
+  end
+
+  defp update_gps_data(%XGPS.Messages.GSA{} = gsa, gps_data) do
+    gps_data
   end
 
   defp update_gps_data(%XGPS.Messages.GGA{} = gga, gps_data) do
