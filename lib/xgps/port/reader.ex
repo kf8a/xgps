@@ -90,7 +90,6 @@ defmodule XGPS.Port.Reader do
 
   defp will_update_gps_data?(%XGPS.Messages.RMC{}), do: true
   defp will_update_gps_data?(%XGPS.Messages.GGA{}), do: true
-  defp will_update_gps_data?(%XGPS.Messages.GSA{}), do: true
   defp will_update_gps_data?(_parsed), do: false
 
   defp log_sentence(sentence) do
@@ -137,27 +136,19 @@ defmodule XGPS.Port.Reader do
     %{gps_data | has_fix: false}
   end
 
-  defp update_gps_data(%XGPS.Messages.GGA{fix_quality: 1}, gps_data) do
-    %{gps_data | has_fix: false}
-  end
-
-  defp update_gps_data(%XGPS.Messages.GSA{fix_quality: 1}, gps_data) do
-    %{gps_data | has_fix: false}
-  end
-
-  defp update_gps_data(%XGPS.Messages.GSA{} = gsa, gps_data) do
-    gps_data
-  end
+  # defp update_gps_data(%XGPS.Messages.GGA{fix_quality: 1}, gps_data) do
+  #   %{gps_data | has_fix: false}
+  # end
 
   defp update_gps_data(%XGPS.Messages.GGA{} = gga, gps_data) do
     %{gps_data | has_fix: true,
-                                fix_quality: gga.fix_quality,
-                                satelites: gga.number_of_satelites_tracked,
-                                hdop: gga.horizontal_dilution,
-                                altitude: gga.altitude,
-                                geoidheight: gga.height_over_goeid,
-                                latitude: gga.latitude,
-                                longitude: gga.longitude}
+                 fix_quality: gga.fix_quality,
+                 satelites: gga.number_of_satelites_tracked,
+                 hdop: gga.horizontal_dilution,
+                 altitude: gga.altitude,
+                 geoidheight: gga.height_over_goeid,
+                 latitude: gga.latitude,
+                 longitude: gga.longitude}
   end
 
   defp knots_to_kmh(speed_in_knots) when is_float(speed_in_knots) do
