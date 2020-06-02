@@ -20,10 +20,9 @@ defmodule XGPS.Mixfile do
   end
 
   defp deps do
-    [{:nerves_uart, "~> 1.2"},
-     {:mix_test_watch, "~> 0.6.0"},
-     {:gen_stage, "~> 0.13.1"},
-     {:ex_doc, ">= 0.0.0", only: :dev}
+    [{:circuits_uart, "~> 1.4"},
+      {:gen_stage, "~> 1.0"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 
